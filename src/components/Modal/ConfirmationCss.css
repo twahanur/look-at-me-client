@@ -1,0 +1,16 @@
+.confirmation-modal {
+  max-width: 400px;
+}
+
+.confirmation-content {
+  text-align: center;
+}
+
+.confirmation-input {
+  width: 80%;
+  margin-bottom: 20px;
+}
+
+.confirm-button {
+  width: 80%;
+}
