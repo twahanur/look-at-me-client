@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { allProduct } from "../../../redux/features/product/productSlice";
 import { useAppDispatch } from "../../../redux/hooks";
 import { TProduct } from "../../../types/productTypes";
@@ -7,25 +7,35 @@ import { Spin, Button, AutoComplete, Checkbox, Divider } from "antd";
 import { SearchOutlined, FilterOutlined } from "@ant-design/icons";
 import ConfirmationModal from "./../../../components/Modal/ConfirmationModal";
 import ProductTable from "./ProductTable";
-import UpdateProductModal from "../../../components/Modal/UpdateProductModal copy";
+import UpdateProductModal from "../../../components/Modal/UpdateProductModal";
 import UiModal from "../../../components/Modal/UiModal";
 import { nullFilterValue } from "../../../utils/defaultValues";
+import { useDeleteProductMutation } from "../../../redux/features/product/productApi";
 
 const { Option } = AutoComplete;
 
 const Products = () => {
-  const { data, isLoading } = useGetAllProductApiQuery("");
+  const [products, setProducts] = useState<TProduct[]>([]);
+  const [checkedItem, setCheckedItem] = useState<string[]>([]);
+  const { data, isLoading, isError } = useGetAllProductApiQuery("");
+  const [deleteProduct] = useDeleteProductMutation();
   const dispatch = useAppDispatch();
   const [searchValue, setSearchValue] = useState("");
   const [selectedProduct, setSelectedProduct] = useState<TProduct | null>(null);
   const [showFilters, setShowFilters] = useState(false);
   const [filters, setFilters] = useState<any>(nullFilterValue);
 
+  // const products: TProduct[] = data?.data?.result || [];
+  // dispatch(allProduct(products));
+
+  useEffect(() => {
+    if (!isLoading && !isError && data) {
+      setProducts(data?.data?.result || []);
+      dispatch(allProduct(data.data || []));
+    }
+  }, [isLoading, data, isError, dispatch]);
+
   if (isLoading) return <Spin size="large" />;
-
-  const products: TProduct[] = data?.data?.result || [];
-  dispatch(allProduct(products));
-
   const handleSearchChange = (value: string) => {
     setSearchValue(value);
   };
@@ -66,6 +76,14 @@ const Products = () => {
     }
 
     return true;
+  };
+
+  const handleBulkDeleteProduct = () => {
+    checkedItem.forEach((item) => {
+      console.log(item);
+      deleteProduct(item);
+    });
+    // console.log("haldleBulkDeleteProduct", checkedItem);
   };
 
   const filteredProducts = products.filter((product) => applyFilters(product));
@@ -145,10 +163,30 @@ const Products = () => {
         </div>
       )}
 
-      <h1 style={{ textAlign: "center", marginBottom: "20px" }}>
-        Our Products
-      </h1>
+      <div>
+        <span
+          style={{
+            textAlign: "center",
+            marginBottom: "20px",
+            display: "flex",
+            justifyContent: "center",
+            fontSize: "2rem",
+          }}>
+          Our Products
+        </span>
+        <Button
+          style={{
+            display: "inline-block",
+            alignItems: "end",
+          }}
+          onClick={handleBulkDeleteProduct}>
+          Delete Selected
+        </Button>
+      </div>
+
       <ProductTable
+        setCheckedItem={setCheckedItem}
+        checkedItem={checkedItem}
         key={selectedProduct?._id}
         data={selectedProduct ? [selectedProduct] : filteredProducts}
       />

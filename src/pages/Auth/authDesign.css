@@ -1,0 +1,43 @@
+.animatedBox h1 {
+  color: white;
+}
+.animatedBox {
+  background-color: rgba(0, 0, 0, 0);
+  border-radius: 30px;
+  overflow: hidden;
+  color: #ffffff;
+}
+
+.borderAnimation {
+  z-index: 0;
+}
+
+.before {
+  z-index: -2;
+  position: absolute;
+  margin-top: 50%;
+  width: 30%;
+  height: 300%;
+  background: linear-gradient(#00fff7, #d500f9);
+  animation: rotate 4s linear infinite;
+}
+.after {
+  z-index: -1;
+  position: absolute;
+  background: #0e1538;
+  inset: 5px;
+  border-radius: 16px;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.formBox {
+  z-index: 3;
+}

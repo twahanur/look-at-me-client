@@ -12,19 +12,37 @@ import { useAppDispatch } from "../../../redux/hooks";
 import { TProduct } from "../../../types/productTypes";
 import { Table, Button, Space } from "antd";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import { nullValue } from "../../../utils/defaultValues";
+import { useNavigate } from "react-router-dom";
+
 interface ProductTableProps {
   data: TProduct[];
+  setCheckedItem: any;
+  checkedItem: string[];
 }
 
-const ProductTable: React.FC<ProductTableProps> = ({ data }) => {
+const ProductTable: React.FC<ProductTableProps> = ({
+  data,
+  setCheckedItem,
+  checkedItem,
+}) => {
   const [count, setCount] = useState(0);
-  const [checkedItem, setCheckedItem] = useState<string[]>([]);
+  // const [checkedItem, setCheckedItem] = useState<string[]>([]);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const handleEdit = async (product: TProduct) => {
     console.log(product);
+    dispatch(selectedProduct(nullValue));
     dispatch(selectedProduct(product));
     dispatch(setUpdateModalVisible(true));
+  };
+  const handleDuplicate = async (product: TProduct) => {
+    console.log(product);
+    dispatch(selectedProduct(nullValue));
+    dispatch(selectedProduct(product));
+    navigate(`user/products/add-product`);
+    navigate(`user/products/add-product`);
   };
 
   const handleDelete = (productId: string) => {
@@ -34,22 +52,27 @@ const ProductTable: React.FC<ProductTableProps> = ({ data }) => {
 
   const handleSell = (product: TProduct) => {
     dispatch(setModalVisible(true));
+    dispatch(selectedProduct(nullValue));
+    dispatch(selectedProduct(product));
     console.log("Product Sold:", product);
   };
 
   const handleCheckboxChange = (productId: string, checked: boolean) => {
     if (checked) {
       setCount((prevCount) => prevCount + 1);
-      setCheckedItem((prevCheckedItem) => [...prevCheckedItem, productId]);
+      setCheckedItem((prevCheckedItem: string[]) => [
+        ...prevCheckedItem,
+        productId,
+      ]);
     } else {
       setCount((prevCount) => prevCount - 1);
-      setCheckedItem((prevCheckedItem) =>
+      setCheckedItem((prevCheckedItem: string[]) =>
         prevCheckedItem.filter((id) => id !== productId)
       );
     }
   };
 
-  console.log("Product _id selected:", checkedItem);
+  // console.log("Product _id selected:", checkedItem);
 
   const columns = [
     {
@@ -133,7 +156,12 @@ const ProductTable: React.FC<ProductTableProps> = ({ data }) => {
             Sell
           </Button>
           <Button icon={<EditOutlined />} onClick={() => handleEdit(record)}>
-            Edit
+            Update
+          </Button>
+          <Button
+            icon={<EditOutlined />}
+            onClick={() => handleDuplicate(record)}>
+            Duplicate
           </Button>
           <Button
             icon={<DeleteOutlined />}
@@ -148,3 +176,4 @@ const ProductTable: React.FC<ProductTableProps> = ({ data }) => {
 };
 
 export default ProductTable;
+

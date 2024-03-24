@@ -12,10 +12,15 @@ const productApi = baseApi.injectEndpoints({
       }),
     }),
     getAllSaleApi: builder.query({
-      query: (period) => ({
-        url: `/sale?period=${period}`,
-        method: "GET",
-      }),
+      query: (period) => {
+        const params = new URLSearchParams();
+        params.append("period", period);
+        return {
+          url: `/sale`,
+          method: "GET",
+          params: params,
+        };
+      },
     }),
   }),
 });

@@ -40,6 +40,7 @@ const UpdateProductModal = () => {
   };
   const handleCancel = () => {
     dispatch(setUpdateModalVisible(false));
+    // dispatch(selectedProduct(nullValue));
     form.resetFields();
   };
 

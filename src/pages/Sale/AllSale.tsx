@@ -2,7 +2,7 @@ import { allProduct } from "../../redux/features/product/productSlice";
 import { useAppDispatch } from "../../redux/hooks";
 import { Button, Dropdown, Menu, Spin } from "antd";
 import ConfirmationModal from "../../components/Modal/ConfirmationModal";
-import UpdateProductModal from "../../components/Modal/UpdateProductModal copy";
+import UpdateProductModal from "../../components/Modal/UpdateProductModal";
 import { useGetAllSaleApiQuery } from "../../redux/features/Sale/SaleApi";
 import SoldProductTable from "./SoldProductTable";
 import { DownOutlined } from "@ant-design/icons";
@@ -22,6 +22,7 @@ const AllSale = () => {
   }, [isLoading, isError, data, dispatch, setFilter]);
 
   const handleFilterSelect = (filterType: SetStateAction<string>) => {
+    console.log(filterType);
     setFilter(filterType);
   };
 

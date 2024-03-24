@@ -21,7 +21,10 @@ const Sidebar = () => {
   }
 
   return (
-    <Sider breakpoint="lg" collapsedWidth="0">
+    <Sider
+      breakpoint="lg"
+      collapsedWidth="0"
+      style={{ backgroundColor: "#65CCB8" }}>
       <div
         style={{
           color: "white",
@@ -30,13 +33,16 @@ const Sidebar = () => {
           justifyContent: "center",
           alignItems: "center",
         }}>
-        <h1>Look At Me</h1>
+        <h1 style={{ color: "#3B945E" }}>Hi! welcome</h1>
       </div>
       <Menu
-        theme="dark"
+        // theme="dark"
         mode="inline"
         defaultSelectedKeys={["4"]}
         items={sidebarItems}
+        style={{
+          backgroundColor: "#65CCB8",
+        }}
       />
     </Sider>
   );

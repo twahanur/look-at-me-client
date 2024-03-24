@@ -11,6 +11,7 @@ import { logout, setUser } from "../features/auth/authSlice";
 
 const baseQuery = fetchBaseQuery({
   baseUrl: "https://look-at-me-server.vercel.app/api",
+  // baseUrl: "http://localhost:5000/api",
   credentials: "include",
   prepareHeaders: (headers, { getState }) => {
     const token = (getState() as RootState).auth.token;
@@ -27,7 +28,6 @@ const baseQueryWithRefreshToken: BaseQueryFn<
   DefinitionType
 > = async (args, api, extraOptions): Promise<any> => {
   let result = await baseQuery(args, api, extraOptions);
-  console.log(result);
   if (result?.error?.status === 401) {
     const res = await fetch("/auth/refresh-token", {
       method: "POST",
@@ -53,5 +53,6 @@ const baseQueryWithRefreshToken: BaseQueryFn<
 export const baseApi = createApi({
   reducerPath: "baseApi",
   baseQuery: baseQueryWithRefreshToken,
+  tagTypes: ["products"],
   endpoints: () => ({}),
 });

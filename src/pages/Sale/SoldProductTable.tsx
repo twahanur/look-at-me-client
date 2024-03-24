@@ -21,6 +21,10 @@ const SoldProductTable: React.FC<SoldTableProps> = ({ data }) => {
       title: "Product Name",
       dataIndex: ["productId", "name"],
       key: "product_name",
+      render: (name: any) => (
+        <span>{`${name || "Product is not available now"}
+        `}</span>
+      ),
     },
     {
       title: "Unit Price",

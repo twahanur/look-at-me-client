@@ -8,7 +8,6 @@ import { toast } from "sonner";
 import { useCreateSaleMutation } from "../../redux/features/Sale/SaleApi";
 
 const UiModal = () => {
-  // const [selectedProduct] = useState<string | null>(null);
   const dispatch = useAppDispatch();
   const [createSale] = useCreateSaleMutation();
   const { FormVisible, selectedProduct } = useAppSelector(
@@ -26,6 +25,9 @@ const UiModal = () => {
       const productId = _id;
       const quantity_sold = parseInt(v.quantity_sold, 10);
 
+      console.log(quantity_sold, selectedProduct.quantity);
+      console.log(typeof quantity_sold, typeof selectedProduct.quantity);
+
       const product = {
         ...selectedProduct,
         productId,
@@ -33,10 +35,12 @@ const UiModal = () => {
         quantity_sold,
         sale_date,
       };
+      console.log({ product });
       const result = await createSale(product);
       console.log(result);
       toast.success("Thanks For your order", { id: toastId, duration: 2000 });
       form.resetFields();
+
       dispatch(setModalVisible(false));
     } catch (error) {
       toast.error(`Something went Wrong`, { id: toastId, duration: 2000 });
